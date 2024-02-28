@@ -1,5 +1,7 @@
 package com.example.Billing_software.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,11 @@ public class Serviceclass implements ServiceInterface{
 	@Override
 	public Customer create(Customer value) {
 		return customerrepo.save(value);
+	}
+
+	@Override
+	public List<Customer> findAll() {
+		return customerrepo.findAll();
 	}
 
 }
