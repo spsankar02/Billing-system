@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Billing_software.Entity.Customer;
+import com.example.Billing_software.Entity.OrderDetails;
+import com.example.Billing_software.Entity.Orders;
 import com.example.Billing_software.Entity.Product;
 import com.example.Billing_software.Service.ServiceInterface;
 
@@ -41,9 +43,9 @@ public class UserController {
 	}
 	
 	@PostMapping("/updatecustomerdetails/{customerId}")
-	public ResponseEntity<Object> method2(@RequestBody Customer value,@PathVariable Long custId){
+	public ResponseEntity<Object> method2(@RequestBody Customer value,@PathVariable Long customerId){
 		try {
-			service.update(value,custId);
+			service.update(value,customerId);
 			return ResponseEntity.ok().body("User details updated successfully");
 		}catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user details: "+e.getMessage());
@@ -51,9 +53,9 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/deletecustomerdetails/{customerId}")
-	public ResponseEntity<Object> method3(@PathVariable Long custId){
+	public ResponseEntity<Object> method3(@PathVariable Long customerId){
 		try {
-		service.deleteCustomerdetails(custId);
+		service.deleteCustomerdetails(customerId);
 		return ResponseEntity.ok().body("User details deleted successfully");}
 		catch(IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user details: "+e.getMessage());
@@ -80,7 +82,7 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/updatecustomerdetails/{productId}")
+	@PostMapping("/updateproductdetails/{productId}")
 	public ResponseEntity<Object> method6(@RequestBody Product value,@PathVariable Long productId){
 		try {
 			service.update(value,productId);
@@ -90,13 +92,34 @@ public class UserController {
 		}
 	}
 	
-	@DeleteMapping("/deletecustomerdetails/{customerId}")
-	public ResponseEntity<Object> method7(@PathVariable Long custId){
+	@DeleteMapping("/deleteproductdetails/{productId}")
+	public ResponseEntity<Object> method7(@PathVariable Long productId){
 		try {
-		service.deleteProductdetails(custId);
+		service.deleteProductdetails(productId);
 		return ResponseEntity.ok().body("Product details deleted successfully");}
 		catch(IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting Product details: "+e.getMessage());
         }
 	}
+	
+	@PostMapping("/addorderdetails")
+	public ResponseEntity<Object> method8(@RequestBody Orders orders){
+		try {
+            service.create(orders);
+        return  ResponseEntity.ok().body("Order details save successfully");}
+        catch(Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating order details");
+        }
+	}
+	
+	@PostMapping("/addproductsfororder")
+	public ResponseEntity<Object> method9(@RequestBody OrderDetails orders){
+		try {
+			service.create(orders);
+			return ResponseEntity.ok().body("productlist details save successfully");}
+		catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating productlist details");
+		}
+	}
+	
 }
