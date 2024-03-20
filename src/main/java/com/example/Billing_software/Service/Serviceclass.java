@@ -1,5 +1,6 @@
 package com.example.Billing_software.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.Billing_software.Entity.Customer;
+import com.example.Billing_software.Entity.OrderDetails;
+import com.example.Billing_software.Entity.Orders;
 import com.example.Billing_software.Entity.Product;
 import com.example.Billing_software.Repo.Customerrepo;
+import com.example.Billing_software.Repo.Orderrepo;
 import com.example.Billing_software.Repo.Productrepo;
 
 import jakarta.transaction.Transactional;
@@ -19,6 +23,8 @@ public class Serviceclass implements ServiceInterface{
 	private Customerrepo customerrepo;
 	@Autowired
 	private Productrepo productrepo;
+	@Autowired
+	private Orderrepo orderrepo;
 	
 	@Override
 	public Customer create(Customer value) {
@@ -31,8 +37,8 @@ public class Serviceclass implements ServiceInterface{
 	}
 
 	@Override
-	public Customer update(Customer value, Long custId) {
-        Optional<Customer> customer = customerrepo.findById(custId);
+	public Customer update(Customer value, Long customerId) {
+        Optional<Customer> customer = customerrepo.findById(customerId);
         if (customer.isPresent()) {
         	Customer customer1=customer.get();
             Optional.ofNullable(value.getCustomerName())
@@ -53,10 +59,10 @@ public class Serviceclass implements ServiceInterface{
 	}
 
 	@Transactional
-	public String deleteCustomerdetails(Long custId) {
-        Optional<Customer> customer = customerrepo.findById(custId);
+	public String deleteCustomerdetails(Long customerId) {
+        Optional<Customer> customer = customerrepo.findById(customerId);
         if(customer.isPresent()) {
-        	customerrepo.deleteById(custId);
+        	customerrepo.deleteById(customerId);
         	return "Customer details deleted successfully";
         }else {
         	throw new IllegalArgumentException("Customer details is not found");
@@ -114,4 +120,19 @@ public class Serviceclass implements ServiceInterface{
 	        }	
 	}
 
+	@Override
+	public Orders create(Orders orders) {
+		orderrepo.save(orders);
+		orders.setOrderDate(LocalDateTime.now());
+		Customer customerinformation=customerrepo.findBycustomerId(orders.getCustomer().getCustomerId());
+		orders.setBeatName(customerinformation.getBeatName());
+		return orderrepo.save(orders);
+	}
+
+	@Override
+	public OrderDetails create(OrderDetails orders) {
+		orders.getOrders().getOrderId();
+		return null;
+	}
+	
 }
