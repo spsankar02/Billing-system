@@ -1,73 +1,22 @@
-package com.example.Billing_software.Service;
+package com.example.demo.Service;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.Billing_software.Entity.Customer;
-import com.example.Billing_software.Entity.OrderDetails;
-import com.example.Billing_software.Entity.Orders;
-import com.example.Billing_software.Entity.Product;
-import com.example.Billing_software.Repo.Customerrepo;
-import com.example.Billing_software.Repo.Orderrepo;
-import com.example.Billing_software.Repo.Productrepo;
+import com.example.demo.model.Product;
+import com.example.demo.repository.Productrepo;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class Serviceclass implements ServiceInterface{
 	@Autowired
-	private Customerrepo customerrepo;
-	@Autowired
 	private Productrepo productrepo;
-	@Autowired
-	private Orderrepo orderrepo;
 	
-	@Override
-	public Customer create(Customer value) {
-		return customerrepo.save(value);
-	}
-
-	@Override
-	public List<Customer> findAllCustomer() {
-		return customerrepo.findAll();
-	}
-
-	@Override
-	public Customer update(Customer value, Long customerId) {
-        Optional<Customer> customer = customerrepo.findById(customerId);
-        if (customer.isPresent()) {
-        	Customer customer1=customer.get();
-            Optional.ofNullable(value.getCustomerName())
-            		.ifPresent(customer1::setCustomerName);
-            Optional.ofNullable(value.getBeatName())
-                    .ifPresent(customer1::setBeatName);
-            Optional.ofNullable(value.getAddress())
-                    .ifPresent(customer1::setAddress);
-            Optional.ofNullable(value.getPhoneNo())
-                    .ifPresent(customer1::setPhoneNo);
-            Optional.ofNullable(value.getGstNo())
-                    .ifPresent(customer1::setGstNo);
-            customerrepo.save(customer1);
-            return customer1;
-        }else {
-            throw new IllegalArgumentException("Customer details not found");
-        }
-	}
-
-	@Transactional
-	public String deleteCustomerdetails(Long customerId) {
-        Optional<Customer> customer = customerrepo.findById(customerId);
-        if(customer.isPresent()) {
-        	customerrepo.deleteById(customerId);
-        	return "Customer details deleted successfully";
-        }else {
-        	throw new IllegalArgumentException("Customer details is not found");
-        }
-	}
 
 	@Override
 	public Product create(Product value) {
@@ -120,19 +69,5 @@ public class Serviceclass implements ServiceInterface{
 	        }	
 	}
 
-	@Override
-	public Orders create(Orders orders) {
-		orderrepo.save(orders);
-		orders.setOrderDate(LocalDateTime.now());
-		Customer customerinformation=customerrepo.findBycustomerId(orders.getCustomer().getCustomerId());
-		orders.setBeatName(customerinformation.getBeatName());
-		return orderrepo.save(orders);
-	}
-
-	@Override
-	public OrderDetails create(OrderDetails orders) {
-		orders.getOrders().getOrderId();
-		return null;
-	}
 	
 }
