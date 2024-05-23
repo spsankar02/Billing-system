@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 
 import jakarta.persistence.Column;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +28,14 @@ public class Product {
 	}
 	public void setDescription(String description) {
 		Description = description;
+	}
+	@Column(name="Initial_stock")
+	private Integer initialStock;
+	public Integer getInitialStock() {
+		return initialStock;
+	}
+	public void setInitialStock(Integer initialStock) {
+		this.initialStock = initialStock;
 	}
 	@Column(name="current_stock")
 	private Integer currentStock;
