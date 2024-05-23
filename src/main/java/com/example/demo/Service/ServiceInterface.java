@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Invoice;
 import com.example.demo.model.Product;
 
 @Service
@@ -20,6 +21,8 @@ public interface ServiceInterface {
 	String deleteProductdetails(Long productId);
 
 	Product update(Map<String, Object> payload);
+
+	List<Invoice> findAllInvoice();
 
 
 }
