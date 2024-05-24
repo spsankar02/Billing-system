@@ -19,6 +19,7 @@ import com.example.demo.model.Invoice;
 import com.example.demo.model.Order;
 import com.example.demo.model.OrderDetails;
 import com.example.demo.model.Product;
+import com.example.demo.repository.BillingRepository;
 import com.example.demo.repository.Invoicerepo;
 import com.example.demo.repository.Orderdetailsrepo;
 import com.example.demo.repository.Orderrepo;
@@ -39,6 +40,8 @@ public class Serviceclass implements ServiceInterface{
 	private Invoicerepo invoicerepo;
 	@Autowired
 	private ObjectMapper objectMapper;
+	@Autowired
+	private BillingRepository userrepo;
 
 	@Override
 	public Product create(Product value) {
@@ -191,8 +194,9 @@ public class Serviceclass implements ServiceInterface{
 
 	public void createInvoice(Map<String,Object> payload) throws ParseException {
 		Order order=new Order();
-        Billing user = objectMapper.convertValue(payload.get("user"), Billing.class);
-		order.setUser(user);
+		System.out.println("hi");
+		Optional<Billing> userdetails=userrepo.findById((long)(int)payload.get("user"));
+		order.setUser(userdetails.get());
 		order.setOrderAmount((Double)payload.get("overalltotal"));
 		String d = (String) payload.get("createdDate");
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
@@ -226,7 +230,11 @@ public class Serviceclass implements ServiceInterface{
         invoice.setCreatedDate(localDate);
         invoice.setDueDate(localDatee);
 		invoice.setStatus((String)payload.get("status"));
-		invoice.setCustomerName(user.getCustomerName());
+		invoice.setUser(order.getUser());
+		invoice.setDiscount(Double.parseDouble((String)payload.get("discountvalue")));
+		invoice.setShipmentTotal(Double.parseDouble((String)payload.get("shippingvalue")));
+		invoice.setSubTotal(Double.parseDouble((String)payload.get("subtotal")));
+		invoice.setTaxValue(Double.parseDouble((String)payload.get("taxvalue")));
 		invoicerepo.save(invoice);
 		System.out.println(payload);
 		if(!invoice.getStatus().contains("Draft"))
