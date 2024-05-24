@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -40,14 +41,48 @@ public class Invoice implements Serializable{
 	@JoinColumn(name = "orders_id")
 	@JsonManagedReference
 	private Order order;
-	@Column(name="customer_name")
-	private String customerName;
-
-	public String getCustomerName() {
-		return customerName;
+	@ManyToOne
+    @JoinColumn(name = "billuser_id")
+	@JsonBackReference
+    private Billing user;
+	@Column(name="sub_total")
+	private Double subTotal;
+	@Column(name="discount")
+	private Double discount;
+	@Column(name="shipment_total")
+	private Double shipmentTotal;
+	@Column(name="tax_value")
+	private Double taxValue;
+	
+	public Double getTaxValue() {
+		return taxValue;
 	}
-	public void setCustomerName(String customerName) {
-		this.customerName = customerName;
+	public void setTaxValue(Double taxValue) {
+		this.taxValue = taxValue;
+	}
+	public Billing getUser() {
+		return user;
+	}
+	public void setUser(Billing user) {
+		this.user = user;
+	}
+	public Double getSubTotal() {
+		return subTotal;
+	}
+	public void setSubTotal(Double subTotal) {
+		this.subTotal = subTotal;
+	}
+	public Double getDiscount() {
+		return discount;
+	}
+	public void setDiscount(Double discount) {
+		this.discount = discount;
+	}
+	public Double getShipmentTotal() {
+		return shipmentTotal;
+	}
+	public void setShipmentTotal(Double shipmentTotal) {
+		this.shipmentTotal = shipmentTotal;
 	}
 	public Order getOrder() {
 		return order;
