@@ -22,8 +22,10 @@ import com.example.demo.Service.Serviceclass;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.Billing;
 import com.example.demo.model.Invoice;
+import com.example.demo.model.Order;
 import com.example.demo.model.Product;
 import com.example.demo.repository.BillingRepository;
+import com.example.demo.repository.Invoicerepo;
 import com.example.demo.repository.Productrepo;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,6 +38,8 @@ public class BillingController {
 
 	@Autowired
 	private Productrepo productrepo;
+	@Autowired
+	private Invoicerepo invoicerepo;
 
 	@Autowired
 	private Serviceclass service;
@@ -182,7 +186,6 @@ public class BillingController {
 	@GetMapping("/retrieveinvoicedetails")
 	public ResponseEntity<List<Invoice>> method9() {
 	    try {
-	    	System.out.println("try");
 	        List<Invoice> invoices = service.findAllInvoice();
 	        return ResponseEntity.ok().body(invoices);
 	    } catch(Exception e) {
@@ -192,7 +195,25 @@ public class BillingController {
 	    }
 	}
 
+	
+	@GetMapping("/getinvoicebyid/{id}")
+	public ResponseEntity<Invoice> getinvoiceById(@PathVariable Long id){
+		Invoice billing = invoicerepo.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Billing not exist with id :" + id));
+		return ResponseEntity.ok(billing);
+	}
 
+	@GetMapping("/retrieveorderdetails")
+	public ResponseEntity<List<Order>> method10() {
+	    try {
+	        List<Order> invoices = service.findAllOrder();
+	        return ResponseEntity.ok().body(invoices);
+	    } catch(Exception e) {
+	    	System.out.println("catch");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                             .body(Collections.emptyList()); // Empty list or null, depending on your requirements
+	    }
+	}
 
 }
 
