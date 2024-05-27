@@ -230,7 +230,7 @@ public class Serviceclass implements ServiceInterface{
         invoice.setCreatedDate(localDate);
         invoice.setDueDate(localDatee);
 		invoice.setStatus((String)payload.get("status"));
-		invoice.setUser(order.getUser());
+		
 		invoice.setDiscount(Double.parseDouble((String)payload.get("discountvalue")));
 		invoice.setShipmentTotal(Double.parseDouble((String)payload.get("shippingvalue")));
 		invoice.setSubTotal(Double.parseDouble((String)payload.get("subtotal")));
@@ -250,6 +250,11 @@ public class Serviceclass implements ServiceInterface{
 	@Override
 	public List<Invoice> findAllInvoice() {
 		return invoicerepo.findAll();
+	}
+
+	@Override
+	public List<Order> findAllOrder() {
+		return orderrepo.findAll();
 	}
 	
 }
