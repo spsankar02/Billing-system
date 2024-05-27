@@ -47,9 +47,7 @@ public class Billing {
     
     @Column(name="role")
     private String Role;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Order> orders;
+
 	
 	public long getId() {
 		return id;

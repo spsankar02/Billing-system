@@ -38,7 +38,6 @@ public class Order {
     private String orderStatus;
 	@ManyToOne
     @JoinColumn(name = "billuser_id")
-	@JsonBackReference
     private Billing user;
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JsonManagedReference

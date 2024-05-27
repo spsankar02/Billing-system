@@ -41,10 +41,7 @@ public class Invoice implements Serializable{
 	@JoinColumn(name = "orders_id")
 	@JsonManagedReference
 	private Order order;
-	@ManyToOne
-    @JoinColumn(name = "billuser_id")
-	@JsonBackReference
-    private Billing user;
+
 	@Column(name="sub_total")
 	private Double subTotal;
 	@Column(name="discount")
@@ -59,12 +56,6 @@ public class Invoice implements Serializable{
 	}
 	public void setTaxValue(Double taxValue) {
 		this.taxValue = taxValue;
-	}
-	public Billing getUser() {
-		return user;
-	}
-	public void setUser(Billing user) {
-		this.user = user;
 	}
 	public Double getSubTotal() {
 		return subTotal;
