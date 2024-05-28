@@ -156,7 +156,6 @@ public class BillingController {
 	@PostMapping("/updateproductdetails/")
 	public ResponseEntity<Object> method6(@RequestBody Map<String, Object> payload){
 		try {
-			System.out.println(payload);
 			Product product=service.update(payload);
 			return ResponseEntity.ok(product);
 		}catch (IllegalArgumentException e) {
@@ -215,6 +214,26 @@ public class BillingController {
 	    }
 	}
 
+	@PostMapping("/deleteInvoicedetails/")
+	public ResponseEntity<Map<String,Boolean>> method11(@RequestBody Map<String,Long> payload){
+		Long InvoiceId=payload.get("id");
+		service.deleteInvoicedetails(InvoiceId);
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/updateinvoicedetails/")
+	public ResponseEntity<Object> method12(@RequestBody Map<String, Object> payload){
+		try {
+			Invoice invoice=service.updateinvoice(payload);
+			return ResponseEntity.ok(invoice);
+		}catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating invoice details: "+e.getMessage());
+		}
+	}
+	
+	
 }
 
 
