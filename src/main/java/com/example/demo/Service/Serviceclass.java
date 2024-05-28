@@ -256,5 +256,65 @@ public class Serviceclass implements ServiceInterface{
 	public List<Order> findAllOrder() {
 		return orderrepo.findAll();
 	}
+
+
+
+	@Override
+	public String deleteInvoicedetails(Long invoiceId) {
+		Optional<Invoice> invoice = invoicerepo.findById(invoiceId);
+        if(invoice.isPresent()) {
+        	invoicerepo.deleteById(invoiceId);
+        	return "Invoice details deleted successfully";
+        }else {
+        	throw new IllegalArgumentException("Invoice details is not found");
+        }	
+	}
+
+	@Override
+	public Invoice updateinvoice(Map<String, Object> payload) {
+		 String id = (String) payload.get("id");
+		    Long invoiceId = Long.parseLong(id);
+		    Invoice invoice = invoicerepo.findById(invoiceId)
+		            .orElseThrow(() -> new IllegalArgumentException("Invoice not found"));
+		    
+		    Object subTotal = payload.get("subTotal");
+		    String subTotalvalue=(String) subTotal;
+		    invoice.setSubTotal(Double.parseDouble(subTotalvalue));
+		    Object discount = payload.get("discount");
+		    String discountvalue=(String) discount;
+		    invoice.setDiscount(Double.parseDouble(discountvalue));
+		    Object shipmentTotal = payload.get("shipmentTotal");
+		    String shipmentTotalvalue=(String) shipmentTotal;
+		    invoice.setShipmentTotal(Double.parseDouble(shipmentTotalvalue));
+		    Object taxValue = payload.get("taxValue");
+		    String taxValuevalue=(String) taxValue;
+		    invoice.setTaxValue(Double.parseDouble(taxValuevalue));
+		    Object amount = payload.get("amount");
+		    String amountvalue=(String) amount;
+		    invoice.setAmount(Double.parseDouble(amountvalue));
+		    invoice.setStatus((String)payload.get("status"));
+		    Object createdDate = payload.get("createdDate");
+		    String createdDatevalue=(String) createdDate;
+		    invoice.setCreatedDate(LocalDate.parse(createdDatevalue));
+		    Object dueDate=payload.get("dueDate");
+		    String dueDatevalue=(String) dueDate;
+		    invoice.setDueDate(LocalDate.parse(dueDatevalue));
+		    Object userid=payload.get("user");
+		    Optional<Billing> userdetails=userrepo.findById((Long)userid);
+		    invoice.getOrder().setUser(userdetails.get());
+		    Object productid=payload.get("productDetailsList");
+		    Optional<Product> productdetails=productrepo.findById((Long)productid);
+		    Optional<OrderDetails> orderdetails=orderdetailsrepo.findById(invoice.getOrder().getId());
+		    orderdetails.get().setProduct(productdetails.get());
+		    Object quantity=payload.get("quantityList");
+		    orderdetails.get().setOrderQuantity(Integer.parseInt(quantity.toString()));
+		    Object price=payload.get("totalList");
+		    orderdetails.get().setOrderPrice(Double.parseDouble(price.toString()));
+		    orderdetailsrepo.save(orderdetails.get());
+		    orderrepo.save(invoice.getOrder());
+		    return invoicerepo.save(invoice);	
+	}
+
+	
 	
 }

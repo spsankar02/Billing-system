@@ -20,8 +20,12 @@ public interface ServiceInterface {
 
 
 	String deleteProductdetails(Long productId);
+	
+	String deleteInvoicedetails(Long invoiceId);
 
 	Product update(Map<String, Object> payload);
+	
+	Invoice updateinvoice(Map<String, Object> payload);
 
 	List<Invoice> findAllInvoice();
 	
