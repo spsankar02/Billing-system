@@ -89,7 +89,10 @@ public class BillingController {
 			phoneNo = String.valueOf(phoneNoValue);
 		} else if (phoneNoValue instanceof String) {
 			phoneNo = (String) phoneNoValue;
-		} else {
+		}else if(phoneNoValue instanceof Integer) {
+			phoneNo = String.valueOf(phoneNoValue);
+		} 
+		else {
 			throw new IllegalArgumentException("Invalid phoneNo value: " + phoneNoValue);
 		}
 		Long id = Long.parseLong(idString);
