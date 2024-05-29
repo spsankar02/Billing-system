@@ -9,6 +9,6 @@ import com.example.demo.model.Order;
 @Repository
 public interface Orderrepo extends JpaRepository<Order, Long>{
 
-	Billing findByUser(Object object);
+//	Billing findByUser(Object object);
 
 }
